@@ -16,10 +16,10 @@ class MySQLUserDAO implements UserDAO{
 		PreparedStatement preparedStatement = null;
 		
 		try {
+			connection = MySQLConnectionFactory.getConnection();
+			
 			String sqlInsert = "INSERT INTO users VALUES "
 					+ " (DEFAULT, ?, ?, ?);";
-			
-			connection = MySQLConnectionFactory.getConnection();
 			
 			preparedStatement = connection.prepareStatement(sqlInsert);
 			
