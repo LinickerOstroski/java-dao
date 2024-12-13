@@ -9,4 +9,5 @@ public interface UserDAO {
 	List<User> listAll(); //leitura
 	boolean update(User user); //update
 	boolean delete(User user); //delete
+	User findByID(User user); 
 }
