@@ -69,21 +69,25 @@ class MySQLUserDAO implements UserDAO{
 			
 			connection = MySQLConnectionFactory.getConnection();
 			
-			String sqlUpdate = "UPDATE users SET users.nome = ?,"
-					+ " sexo = ?, "
+			String sqlUpdate = "UPDATE users "
+					+ "SET nome = ?,"
+					+ "sexo = ?, "
 					+ "email = ?' "
-					+ "WHERE users.id = ?";
+					+ "WHERE id = ?";
 			
 			preparedStatement = connection.prepareStatement(sqlUpdate);
-			preparedStatement.setString(1, content);
-			preparedStatement.setInt(2, userId);
+			preparedStatement.setString(1, user.getName());
+			preparedStatement.setString(2, user.getSex().toString());
+			preparedStatement.setString(3, user.getEmail());
+			preparedStatement.setInt(4, user.getId());
 			
 			int rowsAffected =  preparedStatement.executeUpdate();
 			
-			System.out.printf("%d linha(s) afetada(s)!", rowsAffected);
-			
 			preparedStatement.close();
 			connection.close();
+			
+			return rowsAffected > 0;
+			
 		} catch (SQLException sqlError) {
 			// Erro na execução da SQL
 			sqlError.printStackTrace();
@@ -106,6 +110,7 @@ class MySQLUserDAO implements UserDAO{
 				cSqlError.printStackTrace();
 			} 
 		}		
+		return false;
 	}
 
 	@Override
