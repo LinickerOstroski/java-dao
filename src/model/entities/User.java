@@ -3,7 +3,7 @@ package model.entities;
 public class User {
 	private int id;
 	private String name;
-	private String sex;
+	private Character sex;
 	private String email;
 	
 	public User() {
@@ -22,11 +22,11 @@ public class User {
 		this.name = name;
 	}
 
-	public String getSex() {
+	public Character getSex() {
 		return sex;
 	}
 
-	public void setSex(String sex) {
+	public void setSex(Character sex) {
 		this.sex = sex;
 	}
 
