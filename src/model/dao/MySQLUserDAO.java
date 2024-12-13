@@ -72,8 +72,8 @@ class MySQLUserDAO implements UserDAO{
 			String sqlUpdate = "UPDATE users "
 					+ "SET nome = ?,"
 					+ "sexo = ?, "
-					+ "email = ?' "
-					+ "WHERE id = ?";
+					+ "email = ? "
+					+ "WHERE id = ?; ";
 			
 			preparedStatement = connection.prepareStatement(sqlUpdate);
 			preparedStatement.setString(1, user.getName());
