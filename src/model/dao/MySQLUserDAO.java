@@ -12,52 +12,24 @@ class MySQLUserDAO implements UserDAO{
 	@Override
 	public boolean save(User user) {
 		
-		Connection connection = null;
-		PreparedStatement preparedStatement = null;
 		
-		try {
-			connection = MySQLConnectionFactory.getConnection();
+			String sqlInsert = "INSERT INTO users "
+					+ "VALUES(DEFAULT, ?,?,?);";
 			
-			String sqlInsert = "INSERT INTO users VALUES "
-					+ " (DEFAULT, ?, ?, ?);";
+			DataBaseHandler dbHandler = new DataBaseHandler();
+			dbHandler.prepareStatement(sqlInsert);
 			
-			preparedStatement = connection.prepareStatement(sqlInsert);
+			dbHandler.setString(1, user.getName());
+			dbHandler.setString(2, user.getSex().toString());
+			dbHandler.setString(3, user.getEmail());
 			
-			preparedStatement.setString(1, user.getName());
-			preparedStatement.setString(2, user.getSex().toString());
-			preparedStatement.setString(3, user.getEmail());
-			
-			int rowsAffected =  preparedStatement.executeUpdate();
+			int rowsAffected =  dbHandler.executeUpdate();
 
 			// Necessário fechar os recursos
-			preparedStatement.close();
-			connection.close();
+			dbHandler.close();
 			
 			return rowsAffected > 0;
-		} catch (SQLException sqlError) {
-			// Erro na execução da SQL
-			sqlError.printStackTrace();
-		} catch (Exception generalError) {
-			// Errors na carga do drive (Class.forName)
-			generalError.printStackTrace();
-		} finally {
-			// Para fechar os recursos em caso de erros
-			try {
-				if (preparedStatement != null)
-					preparedStatement.close();
-			} catch (SQLException sSqlError) {
-				sSqlError.printStackTrace();
-			}
-			
-			try {
-				if (connection != null)
-					connection.close();
-			} catch (SQLException cSqlError) {
-				cSqlError.printStackTrace();
-			} 
-		}	
 		
-		return false;
 	}
 	
 	@Override
