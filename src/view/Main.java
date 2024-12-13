@@ -1,6 +1,5 @@
 package view;
 
-import model.dao.MySQLUserDAO;
 import model.dao.UserDAO;
 import model.entities.User;
 
@@ -12,8 +11,8 @@ public class Main {
 		emerson.setEmail("emerson@gmail.com");
 		emerson.setSex('M');
 		
-		UserDAO dao = new MySQLUserDAO();
-		dao.save(emerson);
+//		UserDAO dao = new MySQLUserDAO();
+//		dao.save(emerson);
 	}
 
 }

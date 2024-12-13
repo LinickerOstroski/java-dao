@@ -8,7 +8,7 @@ import java.util.List;
 
 import model.entities.User;
 
-public class MySQLUserDAO implements UserDAO{
+class MySQLUserDAO implements UserDAO{
 	
 	private static final String JDBC_DRIVER_NAME = 
 			"com.mysql.jdbc.Driver";
