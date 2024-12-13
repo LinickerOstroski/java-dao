@@ -1,7 +1,6 @@
 package model.dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
@@ -9,16 +8,6 @@ import java.util.List;
 import model.entities.User;
 
 class MySQLUserDAO implements UserDAO{
-	
-	private static final String JDBC_DRIVER_NAME = 
-			"com.mysql.jdbc.Driver";
-	
-	private static final String DATABASE_URL = 
-			"jdbc:mysql://127.0.0.1/facebook";
-
-	// Credenciais
-	static final String USER = "root";
-	static final String PASSWORD = "";
 
 	@Override
 	public boolean save(User user) {
@@ -27,14 +16,10 @@ class MySQLUserDAO implements UserDAO{
 		PreparedStatement preparedStatement = null;
 		
 		try {
-			
-			Class.forName(JDBC_DRIVER_NAME);
-
-			connection = DriverManager.getConnection(
-					DATABASE_URL, USER, PASSWORD);
-			
 			String sqlInsert = "INSERT INTO users VALUES "
 					+ " (DEFAULT, ?, ?, ?);";
+			
+			connection = MySQLConnectionFactory.getConnection();
 			
 			preparedStatement = connection.prepareStatement(sqlInsert);
 			
@@ -75,17 +60,52 @@ class MySQLUserDAO implements UserDAO{
 		return false;
 	}
 	
-
-	@Override
-	public List<User> listAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	@Override
 	public boolean update(User user) {
-		// TODO Auto-generated method stub
-		return false;
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		
+		try {
+			
+			connection = MySQLConnectionFactory.getConnection();
+			
+			String sqlUpdate = "UPDATE users SET users.nome = ?,"
+					+ " sexo = ?, "
+					+ "email = ?' "
+					+ "WHERE users.id = ?";
+			
+			preparedStatement = connection.prepareStatement(sqlUpdate);
+			preparedStatement.setString(1, content);
+			preparedStatement.setInt(2, userId);
+			
+			int rowsAffected =  preparedStatement.executeUpdate();
+			
+			System.out.printf("%d linha(s) afetada(s)!", rowsAffected);
+			
+			preparedStatement.close();
+			connection.close();
+		} catch (SQLException sqlError) {
+			// Erro na execução da SQL
+			sqlError.printStackTrace();
+		} catch (Exception generalError) {
+			// Errors na carga do drive (Class.forName)
+			generalError.printStackTrace();
+		} finally {
+			// Para fechar os recursos em caso de erros
+			try {
+				if (preparedStatement != null)
+					preparedStatement.close();
+			} catch (SQLException sSqlError) {
+				sSqlError.printStackTrace();
+			}
+			
+			try {
+				if (connection != null)
+					connection.close();
+			} catch (SQLException cSqlError) {
+				cSqlError.printStackTrace();
+			} 
+		}		
 	}
 
 	@Override
@@ -100,4 +120,9 @@ class MySQLUserDAO implements UserDAO{
 		return null;
 	}
 
+	@Override
+	public List<User> listAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
