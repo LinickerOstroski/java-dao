@@ -54,78 +54,24 @@ class MySQLUserDAO implements UserDAO{
 			
 			return rowsAffected > 0;
 			
-		} catch (SQLException sqlError) {
-			// Erro na execução da SQL
-			sqlError.printStackTrace();
-		} catch (Exception generalError) {
-			// Errors na carga do drive (Class.forName)
-			generalError.printStackTrace();
-		} finally {
-			// Para fechar os recursos em caso de erros
-			try {
-				if (preparedStatement != null)
-					preparedStatement.close();
-			} catch (SQLException sSqlError) {
-				sSqlError.printStackTrace();
-			}
-			
-			try {
-				if (connection != null)
-					connection.close();
-			} catch (SQLException cSqlError) {
-				cSqlError.printStackTrace();
-			} 
-		}		
-		return false;
 	}
+	
 
 	@Override
 	public boolean delete(User user) {
-		Connection connection = null;
-		PreparedStatement preparedStatement = null;
+
+		String sqlDelete = "DELETE FROM users WHERE id = ?;";
 		
-		try {
-			
-			connection = MySQLConnectionFactory.getConnection();
-			
-			String sqlUpdate = "";
-			
-			preparedStatement = connection.prepareStatement(sqlUpdate);
-			preparedStatement.setString(1, user.getName());
-			preparedStatement.setString(2, user.getSex().toString());
-			preparedStatement.setString(3, user.getEmail());
-			preparedStatement.setInt(4, user.getId());
-			
-			int rowsAffected =  preparedStatement.executeUpdate();
-			
-			preparedStatement.close();
-			connection.close();
-			
-			return rowsAffected > 0;
-			
-		} catch (SQLException sqlError) {
-			// Erro na execução da SQL
-			sqlError.printStackTrace();
-		} catch (Exception generalError) {
-			// Errors na carga do drive (Class.forName)
-			generalError.printStackTrace();
-		} finally {
-			// Para fechar os recursos em caso de erros
-			try {
-				if (preparedStatement != null)
-					preparedStatement.close();
-			} catch (SQLException sSqlError) {
-				sSqlError.printStackTrace();
-			}
-			
-			try {
-				if (connection != null)
-					connection.close();
-			} catch (SQLException cSqlError) {
-				cSqlError.printStackTrace();
-			} 
-		}		
-		return false;
+		DataBaseHandler dbHandler = new DataBaseHandler();
+		dbHandler.prepareStatement(sqlDelete);
+		
+		dbHandler.setInt(1, user.getId());
+		
+		int rowsAffected =  dbHandler.executeUpdate();
+		
+		dbHandler.close();
+		
+		return rowsAffected > 0;
 	}
 
 	@Override

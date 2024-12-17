@@ -15,17 +15,11 @@ public class DataBaseHandler {
 			
 			preparedStatement = connection.prepareStatement(sql);
 			
-		}catch(SQLException sqle) {
-			
-		}catch(ClassNotFoundException cnfe) {
-			
-		}finally {
+		}catch(Exception e) {
 			try {
 				connection.close();
-			}catch (Exception e) {
-				
-			}
-		}
+			} catch (Exception e2) {}
+		}finally {}
 	}
 
 	public void setString(int index, String value) {
