@@ -2,19 +2,37 @@ package model.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Date;
 
 public class DataBaseHandler {
 	private Connection connection;
 	private PreparedStatement preparedStatement;
-//	private Statement statement;
-	
+	private Statement statement;
+	private ResultSet rs;
+
+	public void statement() {
+		try {
+			connection = MySQLConnectionFactory.getConnection();
+
+			statement = connection.createStatement();
+
+		}catch(Exception e) {
+			try {
+				connection.close();
+			} catch (Exception e2) {}
+		}finally {}
+	}
+
+
 	public void prepareStatement(String sql) {
 		try {
 			connection = MySQLConnectionFactory.getConnection();
-			
+
 			preparedStatement = connection.prepareStatement(sql);
-			
+
 		}catch(Exception e) {
 			try {
 				connection.close();
@@ -26,7 +44,7 @@ public class DataBaseHandler {
 		try {			
 			preparedStatement.setString(index, value);
 		}catch(SQLException e) {
-			
+
 		}
 	}
 
@@ -34,9 +52,9 @@ public class DataBaseHandler {
 		try {			
 			preparedStatement.setInt(index, value);
 		}catch(SQLException e) {
-			
+
 		}
-		
+
 	}
 	public int executeUpdate() {
 		try {
@@ -54,9 +72,20 @@ public class DataBaseHandler {
 			}catch (SQLException e) {
 				e.printStackTrace();
 			}
-		
 		}
-		
+
+		if(rs != null) {
+			try {
+				rs.close();
+			}catch(Exception e) {}
+		}
+
+		if(statement != null) {
+			try {
+				statement.close();
+			}catch(Exception e) {}
+		}
+
 		if(connection != null) {
 			try {
 				connection.close();
@@ -65,8 +94,59 @@ public class DataBaseHandler {
 			}
 		}
 		
+		preparedStatement = null;
+		rs = null;
+		statement = null;
+		connection = null;
+
 	}
 
-	
-	
+
+	public void executeQuery(String sqlQuery) {
+		try {
+			rs = statement.executeQuery(sqlQuery);
+		} catch (SQLException e) {}
+	}
+
+
+	public boolean next() {
+		try {
+			return rs.next();
+		} catch (SQLException e) {}
+		return false;
+	}
+
+
+	public String getString(String column) {
+		try {
+			return rs.getString(column);
+		} catch (SQLException e) {
+		}
+		
+		return "";
+	}
+
+
+	public Date getDate(String column) {
+		try {
+			return rs.getDate(column);
+		} catch (SQLException e) {
+		}
+		return null;
+	}
+
+
+	public int getInt(String string ) {
+		try {
+			return rs.getInt(string);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
+
+
+
 }	
