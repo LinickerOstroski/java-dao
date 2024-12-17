@@ -36,6 +36,14 @@ public class DataBaseHandler {
 		}
 	}
 
+	public void setInt(int index, int value) {
+		try {			
+			preparedStatement.setInt(index, value);
+		}catch(SQLException e) {
+			
+		}
+		
+	}
 	public int executeUpdate() {
 		try {
 			return preparedStatement.executeUpdate();			
@@ -64,6 +72,7 @@ public class DataBaseHandler {
 		}
 		
 	}
+
 	
 	
 }	

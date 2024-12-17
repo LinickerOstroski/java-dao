@@ -12,7 +12,6 @@ class MySQLUserDAO implements UserDAO{
 	@Override
 	public boolean save(User user) {
 		
-		
 			String sqlInsert = "INSERT INTO users "
 					+ "VALUES(DEFAULT, ?,?,?);";
 			
@@ -34,6 +33,54 @@ class MySQLUserDAO implements UserDAO{
 	
 	@Override
 	public boolean update(User user) {
+			
+			String sqlUpdate = "UPDATE users "
+					+ "SET nome = ?,"
+					+ "sexo = ?, "
+					+ "email = ? "
+					+ "WHERE id = ?; ";
+			
+			DataBaseHandler dbHandler = new DataBaseHandler();
+			dbHandler.prepareStatement(sqlUpdate);
+			
+			dbHandler.setString(1, user.getName());
+			dbHandler.setString(2, user.getSex().toString());
+			dbHandler.setString(3, user.getEmail());
+			dbHandler.setInt(4, user.getId());
+			
+			int rowsAffected =  dbHandler.executeUpdate();
+			
+			dbHandler.close();
+			
+			return rowsAffected > 0;
+			
+		} catch (SQLException sqlError) {
+			// Erro na execução da SQL
+			sqlError.printStackTrace();
+		} catch (Exception generalError) {
+			// Errors na carga do drive (Class.forName)
+			generalError.printStackTrace();
+		} finally {
+			// Para fechar os recursos em caso de erros
+			try {
+				if (preparedStatement != null)
+					preparedStatement.close();
+			} catch (SQLException sSqlError) {
+				sSqlError.printStackTrace();
+			}
+			
+			try {
+				if (connection != null)
+					connection.close();
+			} catch (SQLException cSqlError) {
+				cSqlError.printStackTrace();
+			} 
+		}		
+		return false;
+	}
+
+	@Override
+	public boolean delete(User user) {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		
@@ -41,11 +88,7 @@ class MySQLUserDAO implements UserDAO{
 			
 			connection = MySQLConnectionFactory.getConnection();
 			
-			String sqlUpdate = "UPDATE users "
-					+ "SET nome = ?,"
-					+ "sexo = ?, "
-					+ "email = ? "
-					+ "WHERE id = ?; ";
+			String sqlUpdate = "";
 			
 			preparedStatement = connection.prepareStatement(sqlUpdate);
 			preparedStatement.setString(1, user.getName());
@@ -86,12 +129,6 @@ class MySQLUserDAO implements UserDAO{
 	}
 
 	@Override
-	public boolean delete(User user) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public User findByID(User user) {
 		// TODO Auto-generated method stub
 		return null;
@@ -102,4 +139,5 @@ class MySQLUserDAO implements UserDAO{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 }
