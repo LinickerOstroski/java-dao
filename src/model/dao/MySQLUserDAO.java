@@ -92,7 +92,7 @@ class MySQLUserDAO implements UserDAO{
 			
 			User u = new User(userId);
 			u.setName(userName);
-			u.setSex(Character.toChars(0)[0]);
+			u.setSex(userSex.charAt(0));
 			u.setEmail(userEmail);
 			users.add(u);
 		}

@@ -10,7 +10,13 @@ public class Main {
 		User emerson = new User(8);
 		
 		UserDAO dao = (UserDAO) DAOFactory.getDAO(UserDAO.class);
-		System.out.println(dao.delete(emerson));
+		
+		for(User user : dao.listAll()) {
+			System.out.println("Id: " + user.getId());
+			System.out.println("Nome: " + user.getName());
+			System.out.println("Sexo: " + user.getSex());
+			System.out.println("Email: " + user.getEmail());
+		}
 	}
 
 }
