@@ -41,16 +41,13 @@ class MySQLUserDAO implements UserDAO{
 
 		DataBaseHandler dbHandler = new DataBaseHandler();
 		dbHandler.prepareStatement(sqlUpdate);
-
 		dbHandler.setString(1, user.getName());
 		dbHandler.setString(2, user.getSex().toString());
 		dbHandler.setString(3, user.getEmail());
 		dbHandler.setInt(4, user.getId());
-
+		
 		int rowsAffected =  dbHandler.executeUpdate();
-
 		dbHandler.close();
-
 		return rowsAffected > 0;
 
 	}
@@ -58,18 +55,12 @@ class MySQLUserDAO implements UserDAO{
 
 	@Override
 	public boolean delete(User user) {
-
 		String sqlDelete = "DELETE FROM users WHERE id = ?;";
-
 		DataBaseHandler dbHandler = new DataBaseHandler();
 		dbHandler.prepareStatement(sqlDelete);
-
 		dbHandler.setInt(1, user.getId());
-
 		int rowsAffected =  dbHandler.executeUpdate();
-
 		dbHandler.close();
-
 		return rowsAffected > 0;
 	}
 
@@ -77,10 +68,8 @@ class MySQLUserDAO implements UserDAO{
 	public List<User> listAll() {
 		List<User> users = new ArrayList<>();		
 		String sqlQuery = "SELECT * FROM users;";
-
 		DataBaseHandler dbHandler = new DataBaseHandler();
 		dbHandler.statement();
-
 		dbHandler.executeQuery(sqlQuery);
 
 
@@ -89,24 +78,44 @@ class MySQLUserDAO implements UserDAO{
 			String userName = dbHandler.getString("nome");
 			String userSex = dbHandler.getString("sexo");
 			String userEmail = dbHandler.getString("email");
-			
+
 			User u = new User(userId);
 			u.setName(userName);
 			u.setSex(userSex.charAt(0));
 			u.setEmail(userEmail);
 			users.add(u);
 		}
-	
+
 		dbHandler.close();
-		
+
 		return users;
 	}
 
-
 	@Override
-	public User findByID(User user) {
-		// TODO Auto-generated method stub
-		return null;
+	public User findByID(int id) {
+		String sql = "SELECT * FROM users WHERE id = ?;";
+		
+		DataBaseHandler dbHandler = new DataBaseHandler();
+		dbHandler.prepareStatement(sql);
+		dbHandler.setInt(1, id);
+		dbHandler.executeQuery();
+		User user = null;
+		
+		while (dbHandler.next()) {
+			int userId = dbHandler.getInt("id");
+			String userName = dbHandler.getString("nome");
+			String userSex = dbHandler.getString("sexo");
+			String userEmail = dbHandler.getString("email");
+
+			user = new User(userId);
+			user.setName(userName);
+			user.setSex(userSex.charAt(0));
+			user.setEmail(userEmail);
+			break;
+		}
+
+		dbHandler.close();
+		return user;
 	}
 
 }

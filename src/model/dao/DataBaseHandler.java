@@ -107,6 +107,12 @@ public class DataBaseHandler {
 			rs = statement.executeQuery(sqlQuery);
 		} catch (SQLException e) {}
 	}
+	
+	public void executeQuery() {
+		try {
+			rs = preparedStatement.executeQuery();
+		} catch (SQLException e) {}
+	}
 
 
 	public boolean next() {
