@@ -6,9 +6,9 @@ import model.ModelException;
 import model.entities.User;
 
 public interface UserDAO {
-	boolean save(User user); //criação
+	boolean save(User user) throws ModelException; //criação
 	List<User> listAll() throws ModelException; //leitura
-	boolean update(User user); //update
-	boolean delete(User user); //delete
-	User findByID(int id); 
+	boolean update(User user) throws ModelException; //update
+	boolean delete(User user) throws ModelException; //delete
+	User findByID(int id) throws ModelException; 
 }

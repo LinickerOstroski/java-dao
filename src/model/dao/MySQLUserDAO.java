@@ -9,7 +9,7 @@ import model.entities.User;
 class MySQLUserDAO implements UserDAO{
 
 	@Override
-	public boolean save(User user) {
+	public boolean save(User user)throws ModelException {
 
 		String sqlInsert = "INSERT INTO users "
 				+ "VALUES(DEFAULT, ?,?,?);";
@@ -31,7 +31,7 @@ class MySQLUserDAO implements UserDAO{
 	}
 
 	@Override
-	public boolean update(User user) {
+	public boolean update(User user) throws ModelException{
 
 		String sqlUpdate = "UPDATE users "
 				+ "SET nome = ?,"
@@ -54,7 +54,7 @@ class MySQLUserDAO implements UserDAO{
 
 
 	@Override
-	public boolean delete(User user) {
+	public boolean delete(User user) throws ModelException{
 		String sqlDelete = "DELETE FROM users WHERE id = ?;";
 		DataBaseHandler dbHandler = new DataBaseHandler();
 		dbHandler.prepareStatement(sqlDelete);
@@ -92,7 +92,7 @@ class MySQLUserDAO implements UserDAO{
 	}
 
 	@Override
-	public User findByID(int id) {
+	public User findByID(int id) throws ModelException {
 		String sql = "SELECT * FROM users WHERE id = ?;";
 		
 		DataBaseHandler dbHandler = new DataBaseHandler();
