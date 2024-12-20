@@ -1,9 +1,9 @@
 package model.dao;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
+import model.ModelException;
 import model.entities.User;
 
 class MySQLUserDAO implements UserDAO{
@@ -65,7 +65,7 @@ class MySQLUserDAO implements UserDAO{
 	}
 
 	@Override
-	public List<User> listAll() {
+	public List<User> listAll() throws ModelException {
 		List<User> users = new ArrayList<>();		
 		String sqlQuery = "SELECT * FROM users;";
 		DataBaseHandler dbHandler = new DataBaseHandler();
@@ -98,9 +98,9 @@ class MySQLUserDAO implements UserDAO{
 		DataBaseHandler dbHandler = new DataBaseHandler();
 		dbHandler.prepareStatement(sql);
 		dbHandler.setInt(1, id);
+		
 		dbHandler.executeQuery();
 		User user = null;
-		
 		while (dbHandler.next()) {
 			int userId = dbHandler.getInt("id");
 			String userName = dbHandler.getString("nome");

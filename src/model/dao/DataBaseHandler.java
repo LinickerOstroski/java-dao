@@ -7,13 +7,15 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
 
+import model.ModelException;
+
 public class DataBaseHandler {
 	private Connection connection;
 	private PreparedStatement preparedStatement;
 	private Statement statement;
 	private ResultSet rs;
 
-	public void statement() {
+	public void statement() throws ModelException{
 		try {
 			connection = MySQLConnectionFactory.getConnection();
 
@@ -23,6 +25,9 @@ public class DataBaseHandler {
 			try {
 				connection.close();
 			} catch (Exception e2) {}
+			
+			throw new ModelException("Erro ao criar o statement", e);
+			
 		}finally {}
 	}
 
