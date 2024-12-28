@@ -9,7 +9,7 @@ public class DAOFactory {
 	
 	static {
 		daos.put(UserDAO.class, new MySQLUserDAO());
-//		daos.put(PostDAO.class, new MySQLPostDAO());
+		daos.put(PostDAO.class, new MySQLPostDAO());
 	}
 	
 	public static Object getDAO(Class<?> cls) {

@@ -13,7 +13,7 @@ class MySQLConnectionFactory {
 
 	// Credenciais
 	static final String USER = "root";
-	static final String PASSWORD = "";
+	static final String PASSWORD = "admin";
 	
 	public static Connection getConnection() throws SQLException, ClassNotFoundException{
 		Class.forName(JDBC_DRIVER_NAME);
